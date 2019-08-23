@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package grpcProfile;
+
+service grpcProfile {
+    rpc RetrieveFromId(ProfileRequest) returns(Profile) {}
+    rpc UpdateProfile(Profile) returns(SuccessResponse) {}
+    rpc CreateProfile(Profile) returns(SuccessResponse) {}
+}
+
+message Profile {
+    int32 Type        =  1;
+    int32 AccessLevel = 2;
+    string Name     = 3;
+    string ID       = 4;
+}
+
+message ProfileRequest {
+    string ID       = 1;
+}
+
+message SuccessResponse {
+    bool Success = 1;
+}

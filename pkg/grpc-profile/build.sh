@@ -1,0 +1,1 @@
+protoc -I grpc-profile/ grpc-profile/service.proto --go_out=plugins=grpc:grpc-profile
