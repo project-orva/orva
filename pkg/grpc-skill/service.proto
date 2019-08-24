@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package grpcSkill;
+
+service grpcSkill {
+    rpc createSkill(Skill) returns(SuccessResponse) {}
+    rpc deleteSkill(Skill) returns(SuccessResponse) {}
+    rpc updateSkill(Skill) returns(SuccessResponse) {}
+    rpc querySkill(QueryRequest) returns(Skill) {}
+}
+
+message Skill {
+    string ID   =1; 
+    string Endpoint = 2;
+    int32 AccessLevel = 3;    
+}
+
+message QueryRequest {
+    string ID   = 1;
+}
+
+message SuccessResponse {
+    bool Success = 1;
+}
