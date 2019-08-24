@@ -1,0 +1,1 @@
+protoc -I grpc-scheduler/ grpc-scheduler/service.proto --go_out=plugins=grpc:grpc-scheduler
