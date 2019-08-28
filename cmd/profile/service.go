@@ -7,7 +7,7 @@ import (
 )
 
 // RetrieveFromId gets a profile based on the provided ID
-func (request *ServiceRequest) RetrieveFromId(ctx context.Context, rofileRequest *grpcProfile.ProfileRequest) (*grpcProfile.Profile, error) {
+func (request *ServiceRequest) RetrieveFromId(ctx context.Context, profileRequest *grpcProfile.ProfileRequest) (*grpcProfile.Profile, error) {
 	return nil, nil
 }
 
