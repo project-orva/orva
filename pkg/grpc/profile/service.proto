@@ -17,6 +17,7 @@ message Profile {
 
 message ProfileRequest {
     string ID       = 1;
+    int32 Type      =2;
 }
 
 message SuccessResponse {
