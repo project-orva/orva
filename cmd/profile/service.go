@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	grpcProfile "github.com/GuyARoss/project-orva/pkg/grpc-profile"
+	grpcProfile "github.com/GuyARoss/project-orva/pkg/grpc/profile"
 )
 
 // RetrieveFromId gets a profile based on the provided ID

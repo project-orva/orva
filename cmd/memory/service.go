@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	grpcMemory "github.com/GuyARoss/project-orva/pkg/grpc-memory"
+	grpcMemory "github.com/GuyARoss/project-orva/pkg/grpc/memory"
 )
 
 // GetLatestFromUser gets the latest memory from the desired user

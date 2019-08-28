@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc-core"
+	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc/core"
 )
 
 // ProcessStatement processes the inputted statement, outputs a response.

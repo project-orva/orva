@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	grpcScheduler "github.com/GuyARoss/project-orva/pkg/grpc-scheduler"
+	grpcScheduler "github.com/GuyARoss/project-orva/pkg/grpc/scheduler"
 )
 
 // CreateJob creates a new http web job.

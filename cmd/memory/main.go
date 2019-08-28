@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	grpcMemory "github.com/GuyARoss/project-orva/pkg/grpc-memory"
+	grpcMemory "github.com/GuyARoss/project-orva/pkg/grpc/memory"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"

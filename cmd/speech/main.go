@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc-scheduler"
+	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"

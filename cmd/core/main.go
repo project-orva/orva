@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc-core"
+	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc/core"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
