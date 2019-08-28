@@ -22,8 +22,7 @@ func CreateSession(creds *DbCreds) *sql.DB {
 	db, err := sql.Open("postgres", connStr)
 
 	if err != nil {
-		fmt.Println(err.Error())
-		return nil
+		panic(err.Error())
 	}
 
 	return db
