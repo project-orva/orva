@@ -9,8 +9,8 @@ import (
 // ProfilesHandler handles the profiles routine
 func (req *RoutineRequest) ProfilesHandler(ctx *orva.SessionContext, statement string) {
 	// TODO: makes these request goroutines
-	user, userErr := req.checkUser(ctx.InitialInput.UserID)
-	device, deviceErr := req.checkDevice(ctx.InitialInput.DeviceID)
+	user, userErr := req.profile_checkUser(ctx.InitialInput.UserID)
+	device, deviceErr := req.profile_checkDevice(ctx.InitialInput.DeviceID)
 
 	if userErr != nil {
 		ctx.UserAccessLvl = orva.AnonAccess
@@ -27,7 +27,7 @@ func (req *RoutineRequest) ProfilesHandler(ctx *orva.SessionContext, statement s
 	}
 }
 
-func (req *RoutineRequest) checkUser(userID string) (*grpcProfile.Profile, error) {
+func (req *RoutineRequest) profile_checkUser(userID string) (*grpcProfile.Profile, error) {
 	profileReq := &grpcProfile.ProfileRequest{
 		ID: userID,
 		// todo: add account type here
@@ -36,7 +36,7 @@ func (req *RoutineRequest) checkUser(userID string) (*grpcProfile.Profile, error
 	return req.ProfileClient.RetrieveFromId(nil, profileReq)
 }
 
-func (req *RoutineRequest) checkDevice(deviceID string) (*grpcProfile.Profile, error) {
+func (req *RoutineRequest) profile_checkDevice(deviceID string) (*grpcProfile.Profile, error) {
 	profileReq := &grpcProfile.ProfileRequest{
 		ID: deviceID,
 		// todo: add account type here
