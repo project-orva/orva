@@ -6,8 +6,8 @@ import (
 	"github.com/GuyARoss/project-orva/pkg/orva"
 )
 
-// SpeechHandler handles the speech routine.
-func (req *RoutineRequest) SpeechHandler(ctx *orva.SessionContext) {
+// SpeechRoutineHandler handles the speech routine.
+func (req *RoutineRequest) SpeechRoutineHandler(ctx *orva.SessionContext) {
 	speechRequest := &grpcSpeech.SpeechRequest{
 		Message: ctx.InitialInput.Message,
 	}
