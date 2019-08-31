@@ -17,6 +17,7 @@ message Skill {
 
 message QueryRequest {
     string ID   = 1;
+    string Statement = 2;
 }
 
 message SuccessResponse {
