@@ -4,7 +4,6 @@ package orva
 type AccessType int32
 
 const (
-
 	// AnonAccess : New to the system, needs to be registerd
 	AnonAccess AccessType = 0
 
