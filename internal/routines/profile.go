@@ -6,8 +6,8 @@ import (
 	"github.com/GuyARoss/project-orva/pkg/orva"
 )
 
-// ProfilesHandler handles the profiles routine
-func (req *RoutineRequest) ProfilesHandler(ctx *orva.SessionContext, statement string) {
+// ProfileRoutineHandler handles the profiles routine
+func (req *RoutineRequest) ProfileRoutineHandler(ctx *orva.SessionContext) {
 	// TODO: makes these request goroutines
 	user, userErr := req.profile_checkUser(ctx.InitialInput.UserID)
 	device, deviceErr := req.profile_checkDevice(ctx.InitialInput.DeviceID)
