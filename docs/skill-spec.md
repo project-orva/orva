@@ -1,7 +1,14 @@
 ## Skill Spec 
 
-### Request Payload (this is a jwt)
+### Request Payload
 - userId
 - inital statement
 - user access
 - device access
+
+
+### Response Payload 
+- graphic
+- duration
+- response message
+- error
