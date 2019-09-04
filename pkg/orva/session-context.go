@@ -38,3 +38,7 @@ func (ctx *SessionContext) Append(message string, assignedFrom string) {
 
 	ctx.AppliedMessages = &newMessages
 }
+
+func (ctx *SessionContext) JsonMarshal() string {
+
+}
