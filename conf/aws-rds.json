@@ -1,6 +1,6 @@
 {
-    "host": "",
-    "user": "",
-    "password": "",
-    "dbname": ""
+    "host": "truauth-m1.cen4vpa15vib.us-east-1.rds.amazonaws.com",
+    "user": "orva_basic_account",
+    "password": "wh0th12Is$Pa$$w0rf!",
+    "dbname": "orva"
 }

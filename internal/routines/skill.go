@@ -23,6 +23,5 @@ func (req *RoutineRequest) SkillRouineHandler(ctx *orva.SessionContext) {
 		return
 	}
 
-	// this is all wrong, this should come in a different form.. not a string
-	ctx.Append(skillResp, "skill routine")
+	ctx.Append(skillResp)
 }

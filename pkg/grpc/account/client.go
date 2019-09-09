@@ -1,4 +1,4 @@
-package grpcProfile
+package grpcAccount
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 )
 
 // CreateClientConn creates a new core client connection
-func CreateClientConn(hostAddress string) GrpcProfileClient {
+func CreateClientConn(hostAddress string) GrpcAccountClient {
 	k := keepalive.ClientParameters{
 		Time:                time.Minute * 2,
 		PermitWithoutStream: true,
@@ -19,5 +19,5 @@ func CreateClientConn(hostAddress string) GrpcProfileClient {
 		panic(err)
 	}
 
-	return NewGrpcProfileClient(cc)
+	return NewGrpcAccountClient(cc)
 }

@@ -11,12 +11,12 @@ func (request *ServiceRequest) RetrieveFromId(ctx context.Context, profileReques
 	return nil, nil
 }
 
-// UpdateProfile updates a profile
-func (request *ServiceRequest) UpdateProfile(ctx context.Context, profile *grpcProfile.Profile) (*grpcProfile.SuccessResponse, error) {
+// UpdateAccount updates a profile
+func (request *ServiceRequest) UpdateAccount(ctx context.Context, profile *grpcProfile.Profile) (*grpcProfile.SuccessResponse, error) {
 	return nil, nil
 }
 
-// CreateProfile creates a new profile
-func (request *ServiceRequest) CreateProfile(ctx context.Context, profile *grpcProfile.Profile) (*grpcProfile.SuccessResponse, error) {
+// CreateAccount creates a new profile
+func (request *ServiceRequest) CreateAccount(ctx context.Context, profile *grpcProfile.Profile) (*grpcProfile.SuccessResponse, error) {
 	return nil, nil
 }

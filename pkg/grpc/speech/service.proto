@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package grpcSpeech;
+
 service grpcSpeech {
     rpc DetermineSpeech(SpeechRequest) returns(SpeechResponse) {}
     rpc CreateVariant(SpeechRequest) returns(SpeechResponse) {}

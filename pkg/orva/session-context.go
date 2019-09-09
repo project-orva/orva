@@ -1,9 +1,12 @@
 package orva
 
-// AppliedMessage base message that can be after routines cycle
-type AppliedMessage struct {
+// Response base message that can be after routines cycle
+type Response struct {
 	Statement    string
 	AssignedFrom string
+	GraphicURL   string
+	GraphicType  int32
+	Error        string
 }
 
 // Input user input for the session
@@ -15,30 +18,23 @@ type Input struct {
 
 // SessionContext ~Core Route Session Context
 type SessionContext struct {
-	AppliedMessages *[]AppliedMessage
+	AppliedMessages *[]Response
 	InitialInput    *Input
 	DeviceAccessLvl AccessType
 	UserAccessLvl   AccessType
 }
 
 // Append session dialog to context
-func (ctx *SessionContext) Append(message string, assignedFrom string) {
+func (ctx *SessionContext) Append(resp *Response) {
 	appLen := len(*ctx.AppliedMessages) + 1
-	newMessages := make([]AppliedMessage, appLen)
+	newMessages := make([]Response, appLen)
 
 	derefMsgs := *ctx.AppliedMessages
 	for i := 0; i < appLen; i++ {
 		newMessages[i] = derefMsgs[i]
 	}
 
-	newMessages[appLen] = AppliedMessage{
-		Statement:    message,
-		AssignedFrom: assignedFrom,
-	}
+	newMessages[appLen] = *resp
 
 	ctx.AppliedMessages = &newMessages
-}
-
-func (ctx *SessionContext) JsonMarshal() string {
-
 }
