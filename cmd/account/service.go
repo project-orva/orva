@@ -3,20 +3,20 @@ package main
 import (
 	"context"
 
-	grpcProfile "github.com/GuyARoss/project-orva/pkg/grpc/profile"
+	grpcAccount "github.com/GuyARoss/project-orva/pkg/grpc/account"
 )
 
 // RetrieveFromId gets a profile based on the provided ID
-func (request *ServiceRequest) RetrieveFromId(ctx context.Context, profileRequest *grpcProfile.ProfileRequest) (*grpcProfile.Profile, error) {
+func (request *ServiceRequest) RetrieveFromId(ctx context.Context, accReq *grpcAccount.AccountRequest) (*grpcAccount.Account, error) {
 	return nil, nil
 }
 
 // UpdateAccount updates a profile
-func (request *ServiceRequest) UpdateAccount(ctx context.Context, profile *grpcProfile.Profile) (*grpcProfile.SuccessResponse, error) {
+func (request *ServiceRequest) UpdateAccount(ctx context.Context, acc *grpcAccount.Account) (*grpcAccount.SuccessResponse, error) {
 	return nil, nil
 }
 
 // CreateAccount creates a new profile
-func (request *ServiceRequest) CreateAccount(ctx context.Context, profile *grpcProfile.Profile) (*grpcProfile.SuccessResponse, error) {
+func (request *ServiceRequest) CreateAccount(ctx context.Context, acc *grpcAccount.Account) (*grpcAccount.SuccessResponse, error) {
 	return nil, nil
 }
