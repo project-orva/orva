@@ -2,6 +2,7 @@ package routines
 
 import (
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
+	"github.com/GuyARoss/project-orva/pkg/utilities/mappings"
 
 	"github.com/GuyARoss/project-orva/pkg/orva"
 )
@@ -14,10 +15,15 @@ func (req *RoutineRequest) SpeechRoutineHandler(ctx *orva.SessionContext) {
 
 	resp, err := req.SpeechClient.DetermineSpeech(nil, speechRequest)
 	if err != nil {
-		ctx.Append("Having a hard time processing that", "speech handler")
+		resp := &orva.Response{
+			Statement: "Having a hard time processing that",
+		}
+
+		ctx.Append(resp)
 		return
 	}
 
-	ctx.Append(resp.Message, "speech handler")
+	mappedResp := mappings.SpeechToResponse(resp)
+	ctx.Append(mappedResp)
 	return
 }
