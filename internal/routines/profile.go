@@ -1,46 +1,56 @@
 package routines
 
 import (
-	grpcProfile "github.com/GuyARoss/project-orva/pkg/grpc/profile"
+	grpcAccount "github.com/GuyARoss/project-orva/pkg/grpc/account"
 
 	"github.com/GuyARoss/project-orva/pkg/orva"
 )
 
-// ProfileRoutineHandler handles the profiles routine
-func (req *RoutineRequest) ProfileRoutineHandler(ctx *orva.SessionContext) {
+// AccouuntRoutineHandler handles the profiles routine
+func (req *RoutineRequest) AccouuntRoutineHandler(ctx *orva.SessionContext) {
 	// TODO: makes these request goroutines
-	user, userErr := req.profile_checkUser(ctx.InitialInput.UserID)
-	device, deviceErr := req.profile_checkDevice(ctx.InitialInput.DeviceID)
+	user, userErr := req.verifyUserAccount(ctx.InitialInput.UserID)
+	device, deviceErr := req.verifyDeviceAccount(ctx.InitialInput.DeviceID)
 
 	if userErr != nil {
 		ctx.UserAccessLvl = orva.AnonAccess
-		ctx.Append("Could not validate your user access", "profile handler")
+		resp := &orva.Response{
+			Statement: "Coudl not validate your user access",
+		}
+		ctx.Append(resp)
 	} else {
 		ctx.UserAccessLvl = orva.AccessType(user.AccessLevel)
 	}
 
 	if deviceErr != nil {
 		ctx.DeviceAccessLvl = orva.AnonAccess
-		ctx.Append("Could not validate your device access", "profile handler")
+
+		resp := &orva.Response{
+			Statement: "Could not validate your device access",
+		}
+
+		ctx.Append(resp)
 	} else {
 		ctx.DeviceAccessLvl = orva.AccessType(device.AccessLevel)
 	}
 }
 
-func (req *RoutineRequest) profile_checkUser(userID string) (*grpcProfile.Profile, error) {
-	profileReq := &grpcProfile.ProfileRequest{
-		ID: userID,
-		// todo: add account type here
+// account_checkUser checks user profiaccountle under the account routine handler.
+func (req *RoutineRequest) verifyUserAccount(userID string) (*grpcAccount.Account, error) {
+	profileReq := &grpcAccount.AccountRequest{
+		ID:   userID,
+		Type: int32(orva.UserAccount),
 	}
 
-	return req.ProfileClient.RetrieveFromId(nil, profileReq)
+	return req.AccountClient.RetrieveFromId(nil, profileReq)
 }
 
-func (req *RoutineRequest) profile_checkDevice(deviceID string) (*grpcProfile.Profile, error) {
-	profileReq := &grpcProfile.ProfileRequest{
-		ID: deviceID,
-		// todo: add account type here
+// account_checkDevice checks device account under the account routine handler.
+func (req *RoutineRequest) verifyDeviceAccount(deviceID string) (*grpcAccount.Account, error) {
+	profileReq := &grpcAccount.AccountRequest{
+		ID:   deviceID,
+		Type: int32(orva.DeviceAccount),
 	}
 
-	return req.ProfileClient.RetrieveFromId(nil, profileReq)
+	return req.AccountClient.RetrieveFromId(nil, profileReq)
 }
