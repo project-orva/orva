@@ -14,4 +14,7 @@ message SpeechRequest {
 message SpeechResponse {
     int32 Duration = 1; // miliseconds
     string Message = 2;
+    string GraphicURL = 3;
+    string GraphicType = 4;
+    string Error =5;
 }
