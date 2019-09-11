@@ -1,1 +1,1 @@
-protoc -I grpc-speech/ grpc-speech/service.proto --go_out=plugins=grpc:grpc-speech
+protoc -I speech/ speech/service.proto --go_out=plugins=grpc:speech
