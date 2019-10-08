@@ -101,3 +101,5 @@
 		In the future, i would like to implement most of this service as a stand-alone system with embeded skill & speech routines.
 
 
+## TODO: 
+need a skill proxy service, this service will stand as a proxy between rpc functionality & the skills. We are doing this because currently as it stands the grpc url is exposed, so any 
