@@ -7,6 +7,7 @@ import (
 	"time"
 
 	grpcAccount "github.com/GuyARoss/project-orva/pkg/grpc/account"
+	"github.com/GuyARoss/project-orva/pkg/pgdb"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -26,7 +27,7 @@ func main() {
 		MinTime:             1 * time.Minute,
 	}))
 
-	grpcAccount.RegisterGrpcAccountServer(grpcServer, &ServiceRequest{})
+	grpcAccount.RegisterGrpcAccountServer(grpcServer, &ServiceRequest{Creds: pgdb.FetchCreds()})
 	reflection.Register(grpcServer)
 
 	fmt.Println(fmt.Sprintf("gRPC service started on port %s", *tcpPort))
