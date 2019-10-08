@@ -18,5 +18,5 @@ message ProfileRequest {
 message Profile {
     string BlockAddress = 1;
     string AccountID = 2;
-    int32 CreatedOn = 3;    
+    int64 CreatedOn = 3;    
 }
