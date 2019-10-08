@@ -1,4 +1,4 @@
-package routines
+package core_handler
 
 import (
 	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"

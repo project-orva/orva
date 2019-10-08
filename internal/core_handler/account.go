@@ -1,4 +1,4 @@
-package routines
+package core_handler
 
 import (
 	grpcAccount "github.com/GuyARoss/project-orva/pkg/grpc/account"
@@ -6,16 +6,15 @@ import (
 	"github.com/GuyARoss/project-orva/pkg/orva"
 )
 
-// AccouuntRoutineHandler handles the profiles routine
-func (req *RoutineRequest) AccouuntRoutineHandler(ctx *orva.SessionContext) {
-	// TODO: makes these request goroutines
+// AccountRoutineHandler handles the profiles routine
+func (req *RoutineRequest) AccountRoutineHandler(ctx *orva.SessionContext) {
 	user, userErr := req.verifyUserAccount(ctx.InitialInput.UserID)
 	device, deviceErr := req.verifyDeviceAccount(ctx.InitialInput.DeviceID)
 
 	if userErr != nil {
 		ctx.UserAccessLvl = orva.AnonAccess
 		resp := &orva.Response{
-			Statement: "Coudl not validate your user access",
+			Statement: "Could not validate your user access",
 		}
 		ctx.Append(resp)
 	} else {

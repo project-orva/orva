@@ -1,4 +1,4 @@
-package routines
+package core_handler
 
 import (
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"

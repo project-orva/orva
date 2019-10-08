@@ -1,12 +1,12 @@
-package routines
+package core_handler
 
 import (
 	grpcAccount "github.com/GuyARoss/project-orva/pkg/grpc/account"
 	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
+	"github.com/GuyARoss/project-orva/pkg/orva"
 )
 
-// RoutineRequest base request settings for routines
 type RoutineRequest struct {
 	AccountClient grpcAccount.GrpcAccountClient
 	SpeechClient  grpcSpeech.GrpcSpeechClient
@@ -19,4 +19,13 @@ func initRequests(accountAddress string, speechAddress string, skillAddress stri
 		SpeechClient:  grpcSpeech.CreateClientConn(speechAddress),
 		SkillClient:   grpcSkill.CreateClientConn(skillAddress),
 	}
+}
+
+// CoreHandler unifies orva routines
+func (req *RoutineRequest) CoreHandler(ctx *orva.SessionContext) {
+	req.AccountRoutineHandler(ctx)
+
+	req.SkillRouineHandler(ctx)
+
+	req.SpeechRoutineHandler(ctx)
 }
