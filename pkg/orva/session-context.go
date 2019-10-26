@@ -24,6 +24,14 @@ type SessionContext struct {
 	UserAccessLvl   AccessType
 }
 
+// CreateContext creates session context from input
+func CreateContext(input *Input) *SessionContext {
+	ctx := &SessionContext{}
+	ctx.InitialInput = input
+
+	return ctx
+}
+
 // Append session dialog to context
 func (ctx *SessionContext) Append(resp *Response) {
 	appLen := len(*ctx.AppliedMessages) + 1
@@ -37,4 +45,9 @@ func (ctx *SessionContext) Append(resp *Response) {
 	newMessages[appLen] = *resp
 
 	ctx.AppliedMessages = &newMessages
+}
+
+// Responses extracts and returns the response from the session context.
+func (ctx *SessionContext) Responses() *[]Response {
+	return ctx.AppliedMessages
 }
