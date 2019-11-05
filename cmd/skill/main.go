@@ -7,7 +7,7 @@ import (
 	"time"
 
 	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
-	"github.com/GuyARoss/project-orva/pkg/settings"
+	pgdb "github.com/GuyARoss/project-orva/pkg/pgdb"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -27,10 +27,8 @@ func main() {
 		MinTime:             1 * time.Minute,
 	}))
 
-	pgSettings := &settings.AWSRDS{}
-	settings.Init(pgSettings, string(settings.AwsRds))
-
-	grpcSkill.RegisterGrpcSkillServer(grpcServer, &ServiceRequest{pgSettings})
+	pgdbCreds := pgdb.FetchCreds()	
+	grpcSkill.RegisterGrpcSkillServer(grpcServer, &ServiceRequest{pgdbCreds})
 	reflection.Register(grpcServer)
 
 	fmt.Println(fmt.Sprintf("gRPC service started on port %s", *tcpPort))
