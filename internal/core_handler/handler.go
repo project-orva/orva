@@ -21,13 +21,17 @@ func initRequests(accountAddress string, speechAddress string, skillAddress stri
 	}
 }
 
-// CoreHandler unifies orva routines
-func (req *RoutineRequest) CoreHandler(ctx *orva.SessionContext) {
+func invokeRoutineHandlers(ctx *orva.SessionContext) {
 	// todo: make these go routines.
 
 	req.AccountRoutineHandler(ctx)
-
 	req.SkillRoutineHandler(ctx)
-
 	req.SpeechRoutineHandler(ctx)
+}
+
+// CoreHandler unifies orva routines
+func (req *RoutineRequest) CoreHandler(ctx *orva.SessionContext) {
+	invokeRoutineHandlers(ctx)
+
+	// todo: save routine ctx to long-term memory.
 }
