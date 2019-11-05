@@ -23,11 +23,12 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 
 	server.RoutineRequest.CoreHandler(octx)
 	responses := octx.Responses()
+
 	derefResponses := *responses
 
 	// responses -> grpcCore::Response
 	contextResponse := make([]*grpcCore.ContextResponse, len(derefResponses))
-	for i := 0; i < len(derefResponses); i++ {
+	for i := 0; i < len(derefResponses); ++i {
 		contextResponse[i] = &grpcCore.ContextResponse{
 			Message:      derefResponses[i].Statement,
 			AssignedFrom: derefResponses[i].AssignedFrom,

@@ -34,7 +34,7 @@ func (req *RoutineRequest) AccountRoutineHandler(ctx *orva.SessionContext) {
 	}
 }
 
-// account_checkUser checks user profiaccountle under the account routine handler.
+// account_checkUser checks user profile account under the account routine handler.
 func (req *RoutineRequest) verifyUserAccount(userID string) (*grpcAccount.Account, error) {
 	profileReq := &grpcAccount.AccountRequest{
 		ID:   userID,

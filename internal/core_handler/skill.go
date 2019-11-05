@@ -5,8 +5,8 @@ import (
 	"github.com/GuyARoss/project-orva/pkg/orva"
 )
 
-// SkillRouineHandler handles the skill routine
-func (req *RoutineRequest) SkillRouineHandler(ctx *orva.SessionContext) {
+// SkillRoutineHandler handles the skill routine
+func (req *RoutineRequest) SkillRoutineHandler(ctx *orva.SessionContext) {
 	skillQuery := &grpcSkill.QueryRequest{
 		Statement: ctx.InitialInput.Message,
 	}
@@ -19,6 +19,8 @@ func (req *RoutineRequest) SkillRouineHandler(ctx *orva.SessionContext) {
 
 	skillResp, skillErr := orva.SkillWrapper(resp.Endpoint, ctx)
 
+	// if an error occurs or if a skill response is not found 
+	// then we want the speech routine to kick in and handle the speech. 
 	if skillErr != nil {
 		return
 	}

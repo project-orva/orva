@@ -23,9 +23,11 @@ func initRequests(accountAddress string, speechAddress string, skillAddress stri
 
 // CoreHandler unifies orva routines
 func (req *RoutineRequest) CoreHandler(ctx *orva.SessionContext) {
+	// todo: make these go routines.
+
 	req.AccountRoutineHandler(ctx)
 
-	req.SkillRouineHandler(ctx)
+	req.SkillRoutineHandler(ctx)
 
 	req.SpeechRoutineHandler(ctx)
 }
