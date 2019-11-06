@@ -6,7 +6,9 @@ service grpcSkill {
     rpc createSkill(Skill) returns(SuccessResponse) {}
     rpc deleteSkill(Skill) returns(SuccessResponse) {}
     rpc updateSkill(Skill) returns(SuccessResponse) {}
-    rpc querySkill(QueryRequest) returns(Skill) {}
+    rpc findByID(FindRequest) returns(Skill) {}
+
+    rpc queryByInvocation(QueryRequest) returns(Skill) {}
 }
 
 message Skill {
@@ -15,9 +17,12 @@ message Skill {
     int32 AccessLevel = 3;    
 }
 
+message FindRequest {
+    string ID = 1;
+}
+
 message QueryRequest {
-    string ID   = 1;
-    string Statement = 2;
+    string Statement = 1;
 }
 
 message SuccessResponse {
