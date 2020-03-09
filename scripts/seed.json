@@ -1,0 +1,56 @@
+{
+    "couch": {
+        "profiles": [
+            {
+                "id": "2601470e-570d-4931-ab90-4e43e3ef8001",
+                "createdOn": 1583709850,
+                "firstName": "john",
+                "lastName": "doe",
+                "age": 23,
+                "gender": "male"
+            },
+            {
+                "id": "26015g0e-570d-8424-ab90-4e43e3ef8r01",
+                "createdOn": 1583709850,
+                "firstName": "may",
+                "lastName": "time",
+                "age": 23,
+                "gender": "male"
+            }
+        ]
+    },
+    "tables" : {
+        "devices": [
+            {
+                "accessLevel": 2,
+                "id": "260t470e-570d-4931-ab90-4e4523ef8001",
+                "owner": "null",
+                "name": "something fresh",
+                "registedOn": 1583709850
+            },
+            {
+                "accessLevel": 4,
+                "id": "260t470p-570d-4931-db90-4e4523ef8531",
+                "owner": "2601470e-570d-4931-ab90-4e43e3ef8001",
+                "name": "something fresh",
+                "registedOn": 1583709850
+            }
+        ],
+        "users": [
+            {
+                "accessLevel": 4,
+                "firstName": "john",
+                "lastName": "doe",
+                "key": "some-hashed-value",
+                "id": "2601470e-570d-4931-ab90-4e43e3ef8001"
+            },
+            {
+                "firstName": "may",
+                "lastName": "time",
+                "key": "some-hashed-value",
+                "accessLevel": 3,
+                "id": "d4d8262c-5e13-47e4-a378-f37db2edc8c9"
+            }
+        ]
+    }
+}
