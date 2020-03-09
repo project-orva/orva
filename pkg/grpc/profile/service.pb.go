@@ -103,9 +103,7 @@ func (m *ProfileRequest) GetID() string {
 }
 
 type Profile struct {
-	BlockAddress         string   `protobuf:"bytes,1,opt,name=BlockAddress,proto3" json:"BlockAddress,omitempty"`
-	AccountID            string   `protobuf:"bytes,2,opt,name=AccountID,proto3" json:"AccountID,omitempty"`
-	CreatedOn            int64    `protobuf:"varint,3,opt,name=CreatedOn,proto3" json:"CreatedOn,omitempty"`
+	SeralizedProfile     string   `protobuf:"bytes,1,opt,name=SeralizedProfile,proto3" json:"SeralizedProfile,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -136,25 +134,11 @@ func (m *Profile) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Profile proto.InternalMessageInfo
 
-func (m *Profile) GetBlockAddress() string {
+func (m *Profile) GetSeralizedProfile() string {
 	if m != nil {
-		return m.BlockAddress
+		return m.SeralizedProfile
 	}
 	return ""
-}
-
-func (m *Profile) GetAccountID() string {
-	if m != nil {
-		return m.AccountID
-	}
-	return ""
-}
-
-func (m *Profile) GetCreatedOn() int64 {
-	if m != nil {
-		return m.CreatedOn
-	}
-	return 0
 }
 
 func init() {
@@ -166,22 +150,20 @@ func init() {
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 237 bytes of a gzipped FileDescriptorProto
+	// 206 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x4e, 0x2d, 0x2a,
 	0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4e, 0x2f, 0x2a, 0x48, 0x0e,
 	0x28, 0xca, 0x4f, 0xcb, 0xcc, 0x49, 0x55, 0xd2, 0xe1, 0x12, 0x70, 0x2e, 0x4a, 0x4d, 0x2c, 0xc9,
 	0xcc, 0xcf, 0x0b, 0x4a, 0x2d, 0x2e, 0xc8, 0xcf, 0x2b, 0x4e, 0x15, 0x92, 0xe0, 0x62, 0x0f, 0x2e,
 	0x4d, 0x4e, 0x4e, 0x2d, 0x2e, 0x96, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x08, 0x82, 0x71, 0x95, 0x14,
 	0xb8, 0xf8, 0xa0, 0x1a, 0x83, 0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0xf8, 0xb8, 0x98, 0x3c,
-	0x5d, 0xc0, 0xca, 0x38, 0x83, 0x98, 0x3c, 0x5d, 0x94, 0x32, 0xb9, 0xd8, 0xa1, 0x2a, 0x84, 0x94,
-	0xb8, 0x78, 0x9c, 0x72, 0xf2, 0x93, 0xb3, 0x1d, 0x53, 0x52, 0x8a, 0x60, 0x66, 0x71, 0x06, 0xa1,
-	0x88, 0x09, 0xc9, 0x70, 0x71, 0x3a, 0x26, 0x27, 0xe7, 0x97, 0xe6, 0x95, 0x78, 0xba, 0x48, 0x30,
-	0x81, 0x15, 0x20, 0x04, 0x40, 0xb2, 0x60, 0xc7, 0xa5, 0xa6, 0xf8, 0xe7, 0x49, 0x30, 0x2b, 0x30,
-	0x6a, 0x30, 0x07, 0x21, 0x04, 0x8c, 0x96, 0x30, 0x72, 0x21, 0x7b, 0x45, 0xc8, 0x97, 0x4b, 0xcc,
-	0x2d, 0x33, 0x2f, 0x05, 0xca, 0x75, 0xaa, 0x44, 0x98, 0x23, 0xad, 0x87, 0xa4, 0x4e, 0x0f, 0xd5,
-	0x07, 0x52, 0x22, 0xd8, 0x24, 0x95, 0x18, 0x84, 0xdc, 0xb8, 0x78, 0x21, 0x76, 0xc1, 0xcc, 0xc7,
-	0xaa, 0x50, 0x4a, 0x16, 0x45, 0x14, 0x3d, 0x2c, 0x95, 0x18, 0x92, 0xd8, 0xc0, 0xa1, 0x6e, 0x0c,
-	0x08, 0x00, 0x00, 0xff, 0xff, 0x78, 0xb3, 0x9a, 0x9d, 0x86, 0x01, 0x00, 0x00,
+	0x5d, 0xc0, 0xca, 0x38, 0x83, 0x98, 0x3c, 0x5d, 0x94, 0x4c, 0xb9, 0xd8, 0xa1, 0x2a, 0x84, 0xb4,
+	0xb8, 0x04, 0x82, 0x53, 0x8b, 0x12, 0x73, 0x32, 0xab, 0x52, 0x53, 0xa0, 0x62, 0x50, 0x85, 0x18,
+	0xe2, 0x46, 0x0b, 0x19, 0xb9, 0x90, 0x9d, 0x25, 0xe4, 0xc5, 0x25, 0xec, 0x96, 0x99, 0x07, 0x93,
+	0x76, 0xaa, 0x0c, 0x2d, 0x4e, 0x2d, 0xf2, 0x74, 0x11, 0x92, 0xd6, 0x43, 0x52, 0xa4, 0x87, 0xea,
+	0x14, 0x29, 0x11, 0x6c, 0x92, 0x4a, 0x0c, 0x42, 0x6e, 0x5c, 0xbc, 0x60, 0x2f, 0xa6, 0xc2, 0x0c,
+	0xc7, 0xaa, 0x50, 0x4a, 0x16, 0x45, 0x14, 0x3d, 0x50, 0x94, 0x18, 0x92, 0xd8, 0xc0, 0xc1, 0x67,
+	0x0c, 0x08, 0x00, 0x00, 0xff, 0xff, 0x8d, 0x29, 0x17, 0x2d, 0x4f, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -196,7 +178,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type GrpcProfileClient interface {
-	FindProfileByAccountID(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*Profile, error)
+	FindProfileByUserID(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*Profile, error)
 	CreateProfile(ctx context.Context, in *Profile, opts ...grpc.CallOption) (*CreationResponse, error)
 }
 
@@ -208,9 +190,9 @@ func NewGrpcProfileClient(cc *grpc.ClientConn) GrpcProfileClient {
 	return &grpcProfileClient{cc}
 }
 
-func (c *grpcProfileClient) FindProfileByAccountID(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*Profile, error) {
+func (c *grpcProfileClient) FindProfileByUserID(ctx context.Context, in *ProfileRequest, opts ...grpc.CallOption) (*Profile, error) {
 	out := new(Profile)
-	err := c.cc.Invoke(ctx, "/grpcProfile.grpcProfile/FindProfileByAccountID", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpcProfile.grpcProfile/FindProfileByUserID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -228,7 +210,7 @@ func (c *grpcProfileClient) CreateProfile(ctx context.Context, in *Profile, opts
 
 // GrpcProfileServer is the server API for GrpcProfile service.
 type GrpcProfileServer interface {
-	FindProfileByAccountID(context.Context, *ProfileRequest) (*Profile, error)
+	FindProfileByUserID(context.Context, *ProfileRequest) (*Profile, error)
 	CreateProfile(context.Context, *Profile) (*CreationResponse, error)
 }
 
@@ -236,8 +218,8 @@ type GrpcProfileServer interface {
 type UnimplementedGrpcProfileServer struct {
 }
 
-func (*UnimplementedGrpcProfileServer) FindProfileByAccountID(ctx context.Context, req *ProfileRequest) (*Profile, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FindProfileByAccountID not implemented")
+func (*UnimplementedGrpcProfileServer) FindProfileByUserID(ctx context.Context, req *ProfileRequest) (*Profile, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindProfileByUserID not implemented")
 }
 func (*UnimplementedGrpcProfileServer) CreateProfile(ctx context.Context, req *Profile) (*CreationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateProfile not implemented")
@@ -247,20 +229,20 @@ func RegisterGrpcProfileServer(s *grpc.Server, srv GrpcProfileServer) {
 	s.RegisterService(&_GrpcProfile_serviceDesc, srv)
 }
 
-func _GrpcProfile_FindProfileByAccountID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _GrpcProfile_FindProfileByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GrpcProfileServer).FindProfileByAccountID(ctx, in)
+		return srv.(GrpcProfileServer).FindProfileByUserID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpcProfile.grpcProfile/FindProfileByAccountID",
+		FullMethod: "/grpcProfile.grpcProfile/FindProfileByUserID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GrpcProfileServer).FindProfileByAccountID(ctx, req.(*ProfileRequest))
+		return srv.(GrpcProfileServer).FindProfileByUserID(ctx, req.(*ProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -288,8 +270,8 @@ var _GrpcProfile_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*GrpcProfileServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "FindProfileByAccountID",
-			Handler:    _GrpcProfile_FindProfileByAccountID_Handler,
+			MethodName: "FindProfileByUserID",
+			Handler:    _GrpcProfile_FindProfileByUserID_Handler,
 		},
 		{
 			MethodName: "CreateProfile",

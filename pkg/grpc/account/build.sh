@@ -1,1 +1,0 @@
-protoc -I account/ account/service.proto --go_out=plugins=grpc:account

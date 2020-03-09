@@ -3,7 +3,7 @@ syntax = "proto3";
 package grpcProfile;
 
 service grpcProfile {
-    rpc FindProfileByAccountID(ProfileRequest) returns(Profile) {}
+    rpc FindProfileByUserID(ProfileRequest) returns(Profile) {}
     rpc CreateProfile(Profile) returns(CreationResponse) {}
 }
 
@@ -16,7 +16,6 @@ message ProfileRequest {
 }
 
 message Profile {
-    string BlockAddress = 1;
-    string AccountID = 2;
-    int64 CreatedOn = 3;    
+    string SeralizedProfile = 1;
 }
+

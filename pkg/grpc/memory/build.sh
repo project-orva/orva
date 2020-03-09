@@ -1,1 +1,0 @@
-protoc -I grpc-memory/ grpc-memory/service.proto --go_out=plugins=grpc:grpc-memory
