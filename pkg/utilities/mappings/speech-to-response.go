@@ -8,10 +8,9 @@ import (
 // SpeechToResponse maps the speech response to the orva ctx response.
 func SpeechToResponse(speech *grpcSpeech.SpeechResponse) *orva.Response {
 	return &orva.Response{
-		Statement:    speech.Message,
-		AssignedFrom: "speech_routine",
-		GraphicURL:   speech.GraphicURL,
-		GraphicType:  speech.GraphicType,
-		Error:        speech.Error,
+		Statement:   speech.Message,
+		GraphicURL:  speech.GraphicURL,
+		GraphicType: speech.GraphicType,
+		Duration:    speech.Duration,
 	}
 }
