@@ -14,8 +14,8 @@ type skillPayload struct {
 	DeviceAccessLevel int32
 }
 
-// SkillWrapper makes skill request with the ctx
-func SkillWrapper(endoint string, ctx *SessionContext) (*Response, error) {
+// SkillProxy makes skill request with the ctx
+func SkillProxy(endoint string, ctx *SessionContext) (*Response, error) {
 	payload, err := skill_buildPayload(ctx)
 
 	req, err := http.NewRequest("POST", endoint, bytes.NewBuffer([]byte(payload)))
