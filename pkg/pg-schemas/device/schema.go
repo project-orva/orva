@@ -10,34 +10,35 @@ type Request struct {
 	Creds *pgdb.DbCreds
 }
 
-type User struct {
+type Device struct {
 	ID          string
-	AccessLevel string
-	FirstName   string
-	LastName    string
+	AccessLevel int
+	Owner       string
+	Name        string
+	RegistedOn  int64
 }
 
-func (req *Request) FindByID(id string) (*User, error) {
+func (req *Request) FindByID(id string) (*Device, error) {
 	db := pgdb.CreateSession(req.Creds)
 
 	defer db.Close()
 
-	sqlQuery := `select * from users where ID = $1`
+	sqlQuery := `select * from devices where ID = $1`
 	row := db.QueryRow(sqlQuery, id)
 
-	u := &User{}
-	if err := row.Scan(&u.ID, &u.AccessLevel); err != nil && err != sql.ErrNoRows {
+	d := &Device{}
+	if err := row.Scan(&d.ID, &d.AccessLevel, &d.Owner, &d.Name, &d.RegistedOn); err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
-	return u, nil
+	return d, nil
 }
 
-func (req *Request) Create(u *User) error {
+func (req *Request) Create(d *Device) error {
 	db := pgdb.CreateSession(req.Creds)
 	defer db.Close()
 
-	sqlQuery := `insert into users VALUES ($1, $2, $3, $4)`
-	_, err := db.Exec(sqlQuery, u.ID, u.AccessLevel, u.FirstName, u.LastName)
+	sqlQuery := `insert into devices VALUES ($1, $2, $3, $4, $5)`
+	_, err := db.Exec(sqlQuery, d.ID, d.AccessLevel, d.Owner, d.Name, d.RegistedOn)
 
 	return err
 }

@@ -12,9 +12,10 @@ type Request struct {
 
 type User struct {
 	ID          string
-	AccessLevel string
+	AccessLevel int32
 	FirstName   string
 	LastName    string
+	Key         string
 }
 
 func (req *Request) FindByID(id string) (*User, error) {
@@ -26,7 +27,7 @@ func (req *Request) FindByID(id string) (*User, error) {
 	row := db.QueryRow(sqlQuery, id)
 
 	u := &User{}
-	if err := row.Scan(&u.ID, &u.AccessLevel); err != nil && err != sql.ErrNoRows {
+	if err := row.Scan(&u.ID, &u.AccessLevel, &u.FirstName, &u.LastName, &u.Key); err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
 	return u, nil
