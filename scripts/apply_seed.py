@@ -17,8 +17,11 @@ def applyPostgres(conn, seedData):
 
     for table in seedData.keys():
         # drop preexisting tables
-        db.run("DROP TABLE {}".format(table))
-        print("[postgresql] table dropped {}".format(table))
+        try:
+            db.run("DROP TABLE {}".format(table))
+            print("[postgresql] table dropped {}".format(table))
+        except: 
+            print("[postgreql] table {} does not exist".format(table))
 
         # create new tables
         props = ""
@@ -78,5 +81,5 @@ if __name__ == "__main__":
     applyCouchDB("http://0.0.0.0:5984", j["couch"])
     print('[couchDB] seed successfully applied')
 
-    applyPostgres("postgresql://docker:docker@0.0.0.0:32771", j["tables"])
+    applyPostgres("postgresql://docker:docker@0.0.0.0:32768", j["tables"])
     print('[postgresql] seed succesffuly applied')
