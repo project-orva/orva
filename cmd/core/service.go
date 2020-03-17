@@ -3,14 +3,13 @@ package main
 import (
 	"context"
 
-	coreHandler "github.com/GuyARoss/project-orva/internal/core_handler"
 	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc/core"
 	"github.com/GuyARoss/project-orva/pkg/orva"
 	"github.com/GuyARoss/project-orva/pkg/utilities"
 )
 
 type ServiceRequest struct {
-	*coreHandler.RoutineRequest
+	RoutineRequest *RoutineRequest
 }
 
 // ProcessStatement processes the inputted statement, outputs a response.
@@ -22,26 +21,28 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 	octx := orva.CreateContext(input)
 
 	server.RoutineRequest.CoreHandler(octx)
+
 	responses := octx.Responses()
 
 	derefResponses := *responses
+	rlen := len(derefResponses)
 
 	// responses -> grpcCore::Response
-	contextResponse := make([]*grpcCore.ContextResponse, len(derefResponses))
-	for i := 0; i < len(derefResponses); ++i {
-		contextResponse[i] = &grpcCore.ContextResponse{
-			Message:      derefResponses[i].Statement,
-			AssignedFrom: derefResponses[i].AssignedFrom,
-			GraphicURL:   derefResponses[i].GraphicURL,
-			GraphicType:  derefResponses[i].GraphicType,
-			Error:        derefResponses[i].Error,
+	contextResponses := make([]*grpcCore.Response_ContextResponse, rlen)
+	for i := 0; i < rlen; i++ {
+		contextResponses[i] = &grpcCore.Response_ContextResponse{
+			Message:  derefResponses[i].Statement,
+			Gph:      derefResponses[i].GraphicURL,
+			GphType:  derefResponses[i].GraphicType,
+			Duration: derefResponses[i].Duration,
+			// @@ remove the error from the protobuf
 		}
 	}
 
 	t.Stop()
 
 	return &grpcCore.Response{
-		Duration:        int32(t.Distance()),
-		ContextResponse: contextResponse,
+		Duration:         float32(t.Distance()),
+		ContextResponses: contextResponses,
 	}, nil
 }
