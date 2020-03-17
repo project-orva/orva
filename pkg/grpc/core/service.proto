@@ -11,9 +11,15 @@ message Request {
 }
 
 message Response {
-    int32 Duration = 1; // miliseconds
-    string Message = 2; 
+    float Duration = 1;
+    repeated ContextResponse ContextResponses = 2;
+    string Error = 3;
 
-    int32 GphType = 3; // video, picture & audio.
-    string Gph = 4;
+    message ContextResponse {
+        float Duration = 1; // miliseconds
+        string Message = 2; 
+    
+        int32 GphType = 3; // video, picture & audio.
+        string Gph = 4;
+    }
 }
