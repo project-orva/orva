@@ -18,7 +18,7 @@ import (
 func main() {
 	tcpPort := flag.String("p", "3005", "specified port to start the gRPC server on")
 	pgAddress := flag.String("pg", "http://localhost:32768", "postgresql database address")
-	speechAdress := flag.String("s", "http://localhost:5521", "speech service address")
+	speechAdress := flag.String("s", "localhost:5355", "speech service address")
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", *tcpPort))
 	if err != nil {
