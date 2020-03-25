@@ -15,6 +15,5 @@ message SpeechResponse {
     string Message = 2;             
     string GraphicURL = 3;
     int32 GraphicType = 4;    
-    string FowardAddress = 6; // if this exists on the response, foward the request to a skill.
     float Duration = 7; // miliseconds
 }

@@ -1,0 +1,1 @@
+protoc -I skill/ skill/service.proto --go_out=plugins=grpc:skill
