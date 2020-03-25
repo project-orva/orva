@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
@@ -22,11 +21,10 @@ func TestSpeechRoutineHandler(t *testing.T) {
 		},
 	}
 
-	req.SpeechRoutineHandler(ctx)
+	req.fowardContextToSpeechService(ctx)
 
 	f := *ctx.Responses()
 	if len(f) != 1 {
 		t.Error("dis thing should resolve")
 	}
-	fmt.Println(*ctx.Responses())
 }

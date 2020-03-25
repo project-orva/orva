@@ -6,11 +6,12 @@ package grpcSpeech
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -64,11 +65,12 @@ func (m *SpeechRequest) GetMessage() string {
 }
 
 type SpeechResponse struct {
-	Duration             float32  `protobuf:"fixed32,1,opt,name=Duration,proto3" json:"Duration,omitempty"`
+	Accuracy             float32  `protobuf:"fixed32,1,opt,name=Accuracy,proto3" json:"Accuracy,omitempty"`
 	Message              string   `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
 	GraphicURL           string   `protobuf:"bytes,3,opt,name=GraphicURL,proto3" json:"GraphicURL,omitempty"`
 	GraphicType          int32    `protobuf:"varint,4,opt,name=GraphicType,proto3" json:"GraphicType,omitempty"`
-	Error                string   `protobuf:"bytes,5,opt,name=Error,proto3" json:"Error,omitempty"`
+	FowardAddress        string   `protobuf:"bytes,6,opt,name=FowardAddress,proto3" json:"FowardAddress,omitempty"`
+	Duration             float32  `protobuf:"fixed32,7,opt,name=Duration,proto3" json:"Duration,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -99,9 +101,9 @@ func (m *SpeechResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SpeechResponse proto.InternalMessageInfo
 
-func (m *SpeechResponse) GetDuration() float32 {
+func (m *SpeechResponse) GetAccuracy() float32 {
 	if m != nil {
-		return m.Duration
+		return m.Accuracy
 	}
 	return 0
 }
@@ -127,11 +129,18 @@ func (m *SpeechResponse) GetGraphicType() int32 {
 	return 0
 }
 
-func (m *SpeechResponse) GetError() string {
+func (m *SpeechResponse) GetFowardAddress() string {
 	if m != nil {
-		return m.Error
+		return m.FowardAddress
 	}
 	return ""
+}
+
+func (m *SpeechResponse) GetDuration() float32 {
+	if m != nil {
+		return m.Duration
+	}
+	return 0
 }
 
 func init() {
@@ -142,22 +151,22 @@ func init() {
 func init() { proto.RegisterFile("service.proto", fileDescriptor_a0b84a42fa06f626) }
 
 var fileDescriptor_a0b84a42fa06f626 = []byte{
-	// 233 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x91, 0xbd, 0x4a, 0x04, 0x31,
-	0x14, 0x85, 0xcd, 0xea, 0xf8, 0x73, 0x65, 0x14, 0x2e, 0x16, 0x71, 0x0a, 0x19, 0xa6, 0x5a, 0x9b,
-	0x29, 0xf4, 0x11, 0x5c, 0x51, 0x44, 0x9b, 0xf8, 0xd3, 0xc7, 0x70, 0xd9, 0x4d, 0x61, 0x12, 0x6f,
-	0xb2, 0x82, 0x2f, 0x63, 0xe1, 0x93, 0x0a, 0x99, 0x5d, 0xcd, 0x80, 0xd5, 0x76, 0xf9, 0xce, 0x39,
-	0x39, 0x70, 0xb8, 0x50, 0x47, 0xe2, 0x0f, 0x6b, 0xa8, 0x0f, 0xec, 0x93, 0x47, 0x98, 0x73, 0x30,
-	0x8f, 0x81, 0xc8, 0x2c, 0xba, 0x73, 0xa8, 0x87, 0x97, 0xa2, 0xf7, 0x25, 0xc5, 0x84, 0x12, 0xf6,
-	0x1e, 0x28, 0x46, 0x3d, 0x27, 0x29, 0x5a, 0x31, 0x3d, 0x50, 0x6b, 0xec, 0xbe, 0x04, 0x1c, 0xad,
-	0xb3, 0x31, 0x78, 0x17, 0x09, 0x1b, 0xd8, 0x9f, 0x2d, 0x59, 0x27, 0xeb, 0x5d, 0x4e, 0x4f, 0xd4,
-	0x2f, 0x97, 0x45, 0x93, 0x51, 0x11, 0x9e, 0x01, 0xdc, 0xb0, 0x0e, 0x0b, 0x6b, 0x9e, 0xd5, 0xbd,
-	0xdc, 0xce, 0x66, 0xa1, 0x60, 0x0b, 0x87, 0x2b, 0x7a, 0xfa, 0x0c, 0x24, 0x77, 0x5a, 0x31, 0xad,
-	0x54, 0x29, 0xe1, 0x09, 0x54, 0xd7, 0xcc, 0x9e, 0x65, 0x95, 0x3f, 0x0f, 0x70, 0xf1, 0x2d, 0xa0,
-	0x98, 0x86, 0x77, 0x70, 0x3c, 0xa3, 0x44, 0xfc, 0x66, 0x1d, 0xad, 0xa4, 0xd3, 0xfe, 0xcf, 0xef,
-	0x47, 0xbb, 0x9b, 0xe6, 0x3f, 0x6b, 0x98, 0xd9, 0x6d, 0xe1, 0x2d, 0xd4, 0x57, 0x4c, 0x3a, 0xd1,
-	0x8b, 0x66, 0xab, 0x5d, 0xda, 0xb8, 0xe9, 0x75, 0x37, 0xdf, 0xe0, 0xf2, 0x27, 0x00, 0x00, 0xff,
-	0xff, 0xe3, 0x73, 0x15, 0xa7, 0x94, 0x01, 0x00, 0x00,
+	// 235 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0xbf, 0x4a, 0xc4, 0x40,
+	0x10, 0xc6, 0xcd, 0xa9, 0x77, 0x3a, 0x12, 0x8b, 0xb5, 0x59, 0x53, 0x48, 0x08, 0x16, 0x67, 0x93,
+	0x42, 0x9f, 0xe0, 0x40, 0xd4, 0x42, 0x2d, 0x56, 0xed, 0x6c, 0xd6, 0xdd, 0xe1, 0x2e, 0x20, 0xd9,
+	0x75, 0x26, 0x51, 0xf2, 0x8a, 0x3e, 0x95, 0xb8, 0x31, 0xba, 0x0b, 0x76, 0xf3, 0xfd, 0xe1, 0x63,
+	0xf8, 0x41, 0xce, 0x48, 0xef, 0x8d, 0xc1, 0xda, 0x93, 0xeb, 0x9c, 0x80, 0x35, 0x79, 0xf3, 0xe0,
+	0x11, 0xcd, 0xa6, 0x3a, 0x83, 0x7c, 0xbc, 0x14, 0xbe, 0xf5, 0xc8, 0x9d, 0x90, 0xb0, 0xb8, 0x43,
+	0x66, 0xbd, 0x46, 0x99, 0x95, 0xd9, 0x72, 0x5f, 0x4d, 0xb2, 0xfa, 0xcc, 0xe0, 0x70, 0xea, 0xb2,
+	0x77, 0x2d, 0xa3, 0x28, 0x60, 0x6f, 0x65, 0x4c, 0x4f, 0xda, 0x0c, 0xa1, 0x3d, 0x53, 0xbf, 0x3a,
+	0x1e, 0x9a, 0x25, 0x43, 0xe2, 0x04, 0xe0, 0x9a, 0xb4, 0xdf, 0x34, 0xe6, 0x49, 0xdd, 0xca, 0xed,
+	0x10, 0x46, 0x8e, 0x28, 0xe1, 0xe0, 0x47, 0x3d, 0x0e, 0x1e, 0xe5, 0x4e, 0x99, 0x2d, 0x77, 0x55,
+	0x6c, 0x89, 0x53, 0xc8, 0xaf, 0xdc, 0x87, 0x26, 0xbb, 0xb2, 0x96, 0x90, 0x59, 0xce, 0xc3, 0x48,
+	0x6a, 0x7e, 0x7f, 0x77, 0xd9, 0x93, 0xee, 0x1a, 0xd7, 0xca, 0xc5, 0xf8, 0xdd, 0xa4, 0xcf, 0x9f,
+	0x21, 0xa2, 0x20, 0xee, 0xe1, 0xe8, 0x46, 0xb7, 0xf6, 0x15, 0x53, 0x16, 0xc7, 0xf5, 0x5f, 0xa7,
+	0x4e, 0xa2, 0xa2, 0xf8, 0x2f, 0x1a, 0xa9, 0x54, 0x5b, 0x2f, 0xf3, 0x00, 0xfa, 0xe2, 0x2b, 0x00,
+	0x00, 0xff, 0xff, 0xa3, 0x3b, 0x3b, 0x59, 0x79, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -172,8 +181,7 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type GrpcSpeechClient interface {
-	DetermineSpeech(ctx context.Context, in *SpeechRequest, opts ...grpc.CallOption) (*SpeechResponse, error)
-	CreateVariant(ctx context.Context, in *SpeechRequest, opts ...grpc.CallOption) (*SpeechResponse, error)
+	HandleSpeechRequest(ctx context.Context, in *SpeechRequest, opts ...grpc.CallOption) (*SpeechResponse, error)
 }
 
 type grpcSpeechClient struct {
@@ -184,18 +192,9 @@ func NewGrpcSpeechClient(cc *grpc.ClientConn) GrpcSpeechClient {
 	return &grpcSpeechClient{cc}
 }
 
-func (c *grpcSpeechClient) DetermineSpeech(ctx context.Context, in *SpeechRequest, opts ...grpc.CallOption) (*SpeechResponse, error) {
+func (c *grpcSpeechClient) HandleSpeechRequest(ctx context.Context, in *SpeechRequest, opts ...grpc.CallOption) (*SpeechResponse, error) {
 	out := new(SpeechResponse)
-	err := c.cc.Invoke(ctx, "/grpcSpeech.grpcSpeech/DetermineSpeech", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *grpcSpeechClient) CreateVariant(ctx context.Context, in *SpeechRequest, opts ...grpc.CallOption) (*SpeechResponse, error) {
-	out := new(SpeechResponse)
-	err := c.cc.Invoke(ctx, "/grpcSpeech.grpcSpeech/CreateVariant", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/grpcSpeech.grpcSpeech/HandleSpeechRequest", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -204,57 +203,35 @@ func (c *grpcSpeechClient) CreateVariant(ctx context.Context, in *SpeechRequest,
 
 // GrpcSpeechServer is the server API for GrpcSpeech service.
 type GrpcSpeechServer interface {
-	DetermineSpeech(context.Context, *SpeechRequest) (*SpeechResponse, error)
-	CreateVariant(context.Context, *SpeechRequest) (*SpeechResponse, error)
+	HandleSpeechRequest(context.Context, *SpeechRequest) (*SpeechResponse, error)
 }
 
 // UnimplementedGrpcSpeechServer can be embedded to have forward compatible implementations.
 type UnimplementedGrpcSpeechServer struct {
 }
 
-func (*UnimplementedGrpcSpeechServer) DetermineSpeech(ctx context.Context, req *SpeechRequest) (*SpeechResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DetermineSpeech not implemented")
-}
-func (*UnimplementedGrpcSpeechServer) CreateVariant(ctx context.Context, req *SpeechRequest) (*SpeechResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateVariant not implemented")
+func (*UnimplementedGrpcSpeechServer) HandleSpeechRequest(ctx context.Context, req *SpeechRequest) (*SpeechResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleSpeechRequest not implemented")
 }
 
 func RegisterGrpcSpeechServer(s *grpc.Server, srv GrpcSpeechServer) {
 	s.RegisterService(&_GrpcSpeech_serviceDesc, srv)
 }
 
-func _GrpcSpeech_DetermineSpeech_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _GrpcSpeech_HandleSpeechRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SpeechRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GrpcSpeechServer).DetermineSpeech(ctx, in)
+		return srv.(GrpcSpeechServer).HandleSpeechRequest(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpcSpeech.grpcSpeech/DetermineSpeech",
+		FullMethod: "/grpcSpeech.grpcSpeech/HandleSpeechRequest",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GrpcSpeechServer).DetermineSpeech(ctx, req.(*SpeechRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _GrpcSpeech_CreateVariant_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SpeechRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GrpcSpeechServer).CreateVariant(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/grpcSpeech.grpcSpeech/CreateVariant",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GrpcSpeechServer).CreateVariant(ctx, req.(*SpeechRequest))
+		return srv.(GrpcSpeechServer).HandleSpeechRequest(ctx, req.(*SpeechRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -264,12 +241,8 @@ var _GrpcSpeech_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*GrpcSpeechServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "DetermineSpeech",
-			Handler:    _GrpcSpeech_DetermineSpeech_Handler,
-		},
-		{
-			MethodName: "CreateVariant",
-			Handler:    _GrpcSpeech_CreateVariant_Handler,
+			MethodName: "HandleSpeechRequest",
+			Handler:    _GrpcSpeech_HandleSpeechRequest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

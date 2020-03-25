@@ -8,9 +8,9 @@ import (
 	pgDevice "github.com/GuyARoss/project-orva/pkg/pg-schemas/device"
 	pgUser "github.com/GuyARoss/project-orva/pkg/pg-schemas/user"
 	"github.com/GuyARoss/project-orva/pkg/pgdb"
-	"github.com/GuyARoss/project-orva/pkg/utilities/mappings"
 )
 
+// RoutineRequest request used to interact with the handler
 type RoutineRequest struct {
 	SpeechClient grpcSpeech.GrpcSpeechClient
 	PgCreds      *pgdb.DbCreds
@@ -20,19 +20,53 @@ type RoutineRequest struct {
 func (req *RoutineRequest) CoreHandler(ctx *orva.SessionContext) {
 	req.invokeRoutineHandlers(ctx)
 
-	// todo: save routine ctx to long-term memory.
+	// @@ save routine ctx to long-term memory.
 }
 
 func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
-	// todo: make these go routines.
+	// @@ make these go routines.
+	req.accountRoutineHandler(ctx)
+	req.fowardContextToSpeechService(ctx)
+}
 
-	req.AccountRoutineHandler(ctx)
-	req.SkillRoutineHandler(ctx)
-	req.SpeechRoutineHandler(ctx)
+// FowardContextToSpeechService fowards context to speech service
+func (req *RoutineRequest) fowardContextToSpeechService(ctx *orva.SessionContext) {
+	// @@ add the username to the request?
+	sq := &grpcSpeech.SpeechRequest{
+		Message: ctx.InitialInput.Message,
+	}
+
+	resp, err := req.SpeechClient.HandleSpeechRequest(context.Background(), sq)
+	if err != nil {
+		resp := &orva.Response{
+			Statement: "Having a hard time processing that",
+		}
+
+		ctx.Append(resp)
+		return
+	}
+
+	// foward to skill proxy
+	if len(resp.FowardAddress) > 0 {
+		skillResp, skillErr := orva.SkillProxy(resp.FowardAddress, ctx)
+
+		if skillErr != nil {
+			// @@ response that we are having trouble processing dat?
+			return
+		}
+		ctx.Append(skillResp)
+	}
+
+	ctx.Append(&orva.Response{
+		Statement:   resp.Message,
+		Duration:    resp.Duration,
+		GraphicURL:  resp.GraphicURL,
+		GraphicType: resp.GraphicType,
+	})
 }
 
 // AccountRoutineHandler handles the profiles routine
-func (req *RoutineRequest) AccountRoutineHandler(ctx *orva.SessionContext) {
+func (req *RoutineRequest) accountRoutineHandler(ctx *orva.SessionContext) {
 	user, userErr := req.verifyUser(ctx.InitialInput.UserID)
 	device, deviceErr := req.verifyDevice(ctx.InitialInput.DeviceID)
 
@@ -76,43 +110,4 @@ func (req *RoutineRequest) verifyDevice(DID string) (*pgDevice.Device, error) {
 
 func determineSkill(initialStatement string) (string, error) {
 	return "http://localhost:3000/test", nil // @@@
-}
-
-// SkillRoutineHandler handles the skill routine
-func (req *RoutineRequest) SkillRoutineHandler(ctx *orva.SessionContext) {
-	skillEndpoint, err := determineSkill(ctx.InitialInput.Message)
-	if err != nil {
-		return
-	}
-
-	skillResp, skillErr := orva.SkillProxy(skillEndpoint, ctx)
-
-	// if an error occurs or if a skill response is not found
-	// then we want the speech routine to kick in and handle the speech.
-	if skillErr != nil {
-		return
-	}
-
-	ctx.Append(skillResp)
-}
-
-// SpeechRoutineHandler handles the speech routine.
-func (req *RoutineRequest) SpeechRoutineHandler(ctx *orva.SessionContext) {
-	speechRequest := &grpcSpeech.SpeechRequest{
-		Message: ctx.InitialInput.Message,
-	}
-
-	resp, err := req.SpeechClient.DetermineSpeech(context.Background(), speechRequest)
-	if err != nil {
-		resp := &orva.Response{
-			Statement: "Having a hard time processing that",
-		}
-
-		ctx.Append(resp)
-		return
-	}
-
-	mappedResp := mappings.SpeechToResponse(resp)
-	ctx.Append(mappedResp)
-	return
 }
