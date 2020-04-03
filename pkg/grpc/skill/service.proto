@@ -3,7 +3,6 @@ syntax = "proto3";
 package grpcSkill;
 
 service grpcSkill {
-    rpc RegisterCurrentInstance(RegisterRequest) returns(RegisterResponse) {}
     rpc DetermineSkillFromMessage(SkillDeterminationRequest) returns(SkillDeterminationResponse) {}
 }
 
@@ -15,18 +14,5 @@ message SkillDeterminationResponse {
  
 message SkillDeterminationRequest {
     string Message = 1;
-}
-
-message SkillInfo {
-    string ExampleText = 1;
-    string POSMapping = 2;
-}
-
-message RegisterRequest {
-    repeated SkillInfo ExampleInfo = 1; 
-    string SkillName = 2;
-}
-
-message RegisterResponse {
-    bool IsRegistered = 1;
+    float Duration = 2;
 }

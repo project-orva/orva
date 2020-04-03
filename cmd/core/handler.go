@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 
+	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
 	"github.com/GuyARoss/project-orva/pkg/orva"
 	pgDevice "github.com/GuyARoss/project-orva/pkg/pg-schemas/device"
@@ -13,6 +14,7 @@ import (
 // RoutineRequest request used to interact with the handler
 type RoutineRequest struct {
 	SpeechClient grpcSpeech.GrpcSpeechClient
+	SkillClient  grpcSkill.GrpcSkillClient
 	PgCreds      *pgdb.DbCreds
 }
 
@@ -26,7 +28,32 @@ func (req *RoutineRequest) CoreHandler(ctx *orva.SessionContext) {
 func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
 	// @@ make these go routines.
 	req.accountRoutineHandler(ctx)
+	req.fowardContextToSkillService(ctx)
 	req.fowardContextToSpeechService(ctx)
+
+	if len(*ctx.AppliedMessages) < 1 {
+		ctx.Append(&orva.Response{
+			Statement: "Having a hard time processing that",
+		})
+	}
+}
+
+func (req *RoutineRequest) fowardContextToSkillService(ctx *orva.SessionContext) {
+	sq := &grpcSkill.SkillDeterminationRequest{
+		Message: ctx.InitialInput.Message,
+	}
+
+	resp, err := req.SkillClient.DetermineSkillFromMessage(context.Background(), sq)
+	if err != nil || len(resp.FowardAddress) < 0 {
+		return
+	}
+
+	skillResp, skillErr := orva.SkillProxy(resp.FowardAddress, ctx)
+
+	if skillErr == nil {
+		ctx.Append(skillResp)
+		return
+	}
 }
 
 // FowardContextToSpeechService fowards context to speech service
@@ -38,28 +65,11 @@ func (req *RoutineRequest) fowardContextToSpeechService(ctx *orva.SessionContext
 
 	resp, err := req.SpeechClient.HandleSpeechRequest(context.Background(), sq)
 	if err != nil {
-		resp := &orva.Response{
-			Statement: "Having a hard time processing that",
-		}
-
-		ctx.Append(resp)
 		return
-	}
-
-	// foward to skill proxy
-	if len(resp.FowardAddress) > 0 {
-		skillResp, skillErr := orva.SkillProxy(resp.FowardAddress, ctx)
-
-		if skillErr != nil {
-			// @@ response that we are having trouble processing dat?
-			return
-		}
-		ctx.Append(skillResp)
 	}
 
 	ctx.Append(&orva.Response{
 		Statement:   resp.Message,
-		Duration:    resp.Duration,
 		GraphicURL:  resp.GraphicURL,
 		GraphicType: resp.GraphicType,
 	})
@@ -106,8 +116,4 @@ func (req *RoutineRequest) verifyDevice(DID string) (*pgDevice.Device, error) {
 	pgReq := &pgDevice.Request{req.PgCreds}
 
 	return pgReq.FindByID(DID)
-}
-
-func determineSkill(initialStatement string) (string, error) {
-	return "http://localhost:3000/test", nil // @@@
 }
