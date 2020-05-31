@@ -3,16 +3,15 @@ syntax = "proto3";
 package grpcSkill;
 
 service grpcSkill {
-    rpc DetermineSkillFromMessage(SkillDeterminationRequest) returns(SkillDeterminationResponse) {}
+    rpc ProcessSkillRequest(ProcessRequest) returns(ProcessResponse) {}
 }
 
-message SkillDeterminationResponse {
-    float Accuracy = 1;
-    float Duration = 2;
-    string FowardAddress = 3;
+message ProcessResponse {
+    string ForwardAddress = 1;
+    string SubsetID = 2;
 }
- 
-message SkillDeterminationRequest {
+
+message ProcessRequest {
     string Message = 1;
-    float Duration = 2;
+    string TransactionID = 2;
 }

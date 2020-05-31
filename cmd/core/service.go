@@ -23,18 +23,16 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 	server.RoutineRequest.CoreHandler(octx)
 
 	responses := octx.Responses()
-
-	derefResponses := *responses
-	rlen := len(derefResponses)
+	rlen := len(responses)
 
 	// responses -> grpcCore::Response
 	contextResponses := make([]*grpcCore.Response_ContextResponse, rlen)
 	for i := 0; i < rlen; i++ {
 		contextResponses[i] = &grpcCore.Response_ContextResponse{
-			Message:  derefResponses[i].Statement,
-			Gph:      derefResponses[i].GraphicURL,
-			GphType:  derefResponses[i].GraphicType,
-			Duration: derefResponses[i].Duration,
+			Message:  responses[i].Statement,
+			Gph:      responses[i].GraphicURL,
+			GphType:  responses[i].GraphicType,
+			Duration: responses[i].Duration,
 			// @@ remove the error from the protobuf
 		}
 	}

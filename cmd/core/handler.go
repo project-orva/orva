@@ -31,7 +31,7 @@ func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
 	req.fowardContextToSkillService(ctx)
 	req.fowardContextToSpeechService(ctx)
 
-	if len(*ctx.AppliedMessages) < 1 {
+	if len(ctx.AppliedMessages) == 0 {
 		ctx.Append(&orva.Response{
 			Statement: "Having a hard time processing that",
 		})
@@ -42,6 +42,8 @@ func (req *RoutineRequest) fowardContextToSkillService(ctx *orva.SessionContext)
 	sq := &grpcSkill.SkillDeterminationRequest{
 		Message: ctx.InitialInput.Message,
 	}
+
+	fmt.Println(sq)
 
 	resp, err := req.SkillClient.DetermineSkillFromMessage(context.Background(), sq)
 	if err != nil || len(resp.FowardAddress) < 0 {
