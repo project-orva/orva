@@ -8,6 +8,7 @@ import (
 
 	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc/core"
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
+	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
 	"github.com/GuyARoss/project-orva/pkg/pgdb"
 
 	"google.golang.org/grpc"
@@ -18,7 +19,8 @@ import (
 func main() {
 	tcpPort := flag.String("p", "3005", "specified port to start the gRPC server on")
 	pgAddress := flag.String("pg", "http://localhost:32768", "postgresql database address")
-	speechAdress := flag.String("s", "localhost:5355", "speech service address")
+	speechAddress := flag.String("speechUrl", "localhost:5355", "speech service address")
+	skillAddress := flag.String("skillUrl", "localhost:5053", "skill service address")
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", *tcpPort))
 	if err != nil {
@@ -26,7 +28,8 @@ func main() {
 	}
 
 	rr := &RoutineRequest{
-		SpeechClient: grpcSpeech.CreateClientConn(*speechAdress),
+		SkillClient: grpcSkill.CreateClientConn(*skillAddress),
+		SpeechClient: grpcSpeech.CreateClientConn(*speechAddress),
 		PgCreds: &pgdb.DbCreds{ // @@@ nut done, plz fix
 			Host:     *pgAddress,
 			User:     "docker",
@@ -42,7 +45,7 @@ func main() {
 
 	// grpcProfile.RegisterGrpcProfileServer(grpcServer, &ServiceRequest{})
 	grpcCore.RegisterGrpcCoreServer(grpcServer, &ServiceRequest{
-		RoutineRequest: rr,
+		RoutineRequest: rr,		
 	})
 	reflection.Register(grpcServer)
 

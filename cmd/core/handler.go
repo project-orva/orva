@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
@@ -39,18 +40,22 @@ func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
 }
 
 func (req *RoutineRequest) fowardContextToSkillService(ctx *orva.SessionContext) {
-	sq := &grpcSkill.SkillDeterminationRequest{
-		Message: ctx.InitialInput.Message,
-	}
-
-	fmt.Println(sq)
-
-	resp, err := req.SkillClient.DetermineSkillFromMessage(context.Background(), sq)
-	if err != nil || len(resp.FowardAddress) < 0 {
+	if req.SkillClient == nil {
+		fmt.Println("we no have this thing")
 		return
 	}
 
-	skillResp, skillErr := orva.SkillProxy(resp.FowardAddress, ctx)
+	sq := &grpcSkill.ProcessRequest{
+		Message: ctx.InitialInput.Message,
+		TransactionID: "test123",
+	}
+	
+	resp, err := req.SkillClient.ProcessSkillRequest(context.Background(), sq)
+	if err != nil || len(resp.ForwardAddress) < 0 {
+		return
+	}
+
+	skillResp, skillErr := orva.SkillProxy(resp.ForwardAddress, ctx)
 
 	if skillErr == nil {
 		ctx.Append(skillResp)

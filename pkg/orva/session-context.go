@@ -1,7 +1,5 @@
 package orva
 
-import "fmt"
-
 // Response base message that can be after routines cycle
 type Response struct {
 	Statement    string
@@ -40,10 +38,7 @@ func CreateContext(input *Input) *SessionContext {
 }
 
 // Append session dialog to context
-func (ctx *SessionContext) Append(resp *Response) {
-	fmt.Println(resp)
-	fmt.Println(ctx)
-	
+func (ctx *SessionContext) Append(resp *Response) {	
 	ctx.AppliedMessages = append(ctx.AppliedMessages, *resp)
 }
 
