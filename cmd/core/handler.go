@@ -41,7 +41,6 @@ func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
 
 func (req *RoutineRequest) fowardContextToSkillService(ctx *orva.SessionContext) {
 	if req.SkillClient == nil {
-		fmt.Println("we no have this thing")
 		return
 	}
 
@@ -65,6 +64,10 @@ func (req *RoutineRequest) fowardContextToSkillService(ctx *orva.SessionContext)
 
 // FowardContextToSpeechService fowards context to speech service
 func (req *RoutineRequest) fowardContextToSpeechService(ctx *orva.SessionContext) {
+	if req.SpeechClient == nil {
+		return
+	}
+
 	// @@ add the username to the request?
 	sq := &grpcSpeech.SpeechRequest{
 		Message: ctx.InitialInput.Message,
@@ -86,6 +89,17 @@ func (req *RoutineRequest) fowardContextToSpeechService(ctx *orva.SessionContext
 func (req *RoutineRequest) accountRoutineHandler(ctx *orva.SessionContext) {
 	user, userErr := req.verifyUser(ctx.InitialInput.UserID)
 	device, deviceErr := req.verifyDevice(ctx.InitialInput.DeviceID)
+
+	if userErr != nil && deviceErr != nil {
+		ctx.UserAccessLvl = orva.AnonAccess
+		resp := &orva.Response{
+			Statement: "Could not validate your request",
+		}
+
+		ctx.Append(resp)
+
+		return
+	}
 
 	if userErr != nil {
 		ctx.UserAccessLvl = orva.AnonAccess
