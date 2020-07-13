@@ -1,34 +1,38 @@
-package main
+package handler
 
 import (
 	"context"
-	"fmt"
 
 	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
 	"github.com/GuyARoss/project-orva/pkg/orva"
-	pgDevice "github.com/GuyARoss/project-orva/pkg/pg-schemas/device"
-	pgUser "github.com/GuyARoss/project-orva/pkg/pg-schemas/user"
-	"github.com/GuyARoss/project-orva/pkg/pgdb"
 )
 
 // RoutineRequest request used to interact with the handler
 type RoutineRequest struct {
 	SpeechClient grpcSpeech.GrpcSpeechClient
 	SkillClient  grpcSkill.GrpcSkillClient
-	PgCreds      *pgdb.DbCreds
+
+	AuthURI 	string 
 }
 
 // CoreHandler unifies orva routines
-func (req *RoutineRequest) CoreHandler(ctx *orva.SessionContext) {
+func (req *RoutineRequest) Invoke(ctx *orva.SessionContext) {
+	err := req.validateRequest()
+	if err != nil {
+		ctx.Append(&orva.Response{
+			Statement: "Having trouble validating your request",
+		})
+		return
+	}
+
 	req.invokeRoutineHandlers(ctx)
 
 	// @@ save routine ctx to long-term memory.
 }
 
 func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
-	// @@ make these go routines.
-	req.accountRoutineHandler(ctx)
+	// @@ go routines.
 	req.fowardContextToSkillService(ctx)
 	req.fowardContextToSpeechService(ctx)
 
@@ -87,54 +91,13 @@ func (req *RoutineRequest) fowardContextToSpeechService(ctx *orva.SessionContext
 
 // AccountRoutineHandler handles the profiles routine
 func (req *RoutineRequest) accountRoutineHandler(ctx *orva.SessionContext) {
-	user, userErr := req.verifyUser(ctx.InitialInput.UserID)
-	device, deviceErr := req.verifyDevice(ctx.InitialInput.DeviceID)
 
-	if userErr != nil && deviceErr != nil {
-		ctx.UserAccessLvl = orva.AnonAccess
-		resp := &orva.Response{
-			Statement: "Could not validate your request",
-		}
-
-		ctx.Append(resp)
-
-		return
-	}
-
-	if userErr != nil {
-		ctx.UserAccessLvl = orva.AnonAccess
-		resp := &orva.Response{
-			Statement: "Could not validate your user access",
-		}
-
-		ctx.Append(resp)
-	} else {
-		ctx.UserAccessLvl = orva.AccessType(user.AccessLevel)
-	}
-
-	if deviceErr != nil {
-		ctx.DeviceAccessLvl = orva.AnonAccess
-
-		resp := &orva.Response{
-			Statement: "Could not validate your device access",
-		}
-
-		ctx.Append(resp)
-	} else {
-		ctx.DeviceAccessLvl = orva.AccessType(device.AccessLevel)
-	}
 }
 
-// account_checkUser checks user profile account under the account routine handler.
-func (req *RoutineRequest) verifyUser(UID string) (*pgUser.User, error) {
-	pgReq := &pgUser.Request{req.PgCreds}
-
-	return pgReq.FindByID(UID)
-}
-
-// account_checkDevice checks device account under the account routine handler.
-func (req *RoutineRequest) verifyDevice(DID string) (*pgDevice.Device, error) {
-	pgReq := &pgDevice.Request{req.PgCreds}
-
-	return pgReq.FindByID(DID)
+func (req *RoutineRequest) validateRequest() error {
+	// @@ send the device id and key to auth service
+	// get back the token
+	// make call to profile respository with the identity token & prepare the user payload
+	// if err then return invalid, else return valid.
+	return nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"flag"
 	"fmt"
 	"net"
@@ -9,7 +10,9 @@ import (
 	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc/core"
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
 	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
-	"github.com/GuyARoss/project-orva/pkg/pgdb"
+	handler "github.com/GuyARoss/project-orva/internal"
+
+	"github.com/joho/godotenv"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -18,24 +21,20 @@ import (
 
 func main() {
 	tcpPort := flag.String("p", "3005", "specified port to start the gRPC server on")
-	pgAddress := flag.String("pg", "http://localhost:32768", "postgresql database address")
-	speechAddress := flag.String("speechUrl", "localhost:5355", "speech service address")
-	skillAddress := flag.String("skillUrl", "localhost:5053", "skill service address")
+	envErr := godotenv.Load("../../.env")
+	if envErr != nil {
+		panic(envErr)
+	}
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", *tcpPort))
 	if err != nil {
 		panic(err)
 	}
 
-	rr := &RoutineRequest{
-		SkillClient: grpcSkill.CreateClientConn(*skillAddress),
-		SpeechClient: grpcSpeech.CreateClientConn(*speechAddress),
-		PgCreds: &pgdb.DbCreds{ // @@@ nut done, plz fix
-			Host:     *pgAddress,
-			User:     "docker",
-			Password: "docker",
-			Dbname:   "docker",
-		},
+	rr := &handler.RoutineRequest{
+		SkillClient: grpcSkill.CreateClientConn(os.Getenv("SKILL_URI")),
+		SpeechClient: grpcSpeech.CreateClientConn(os.Getenv("SPEECH_URI")),
+		AuthURI: os.Getenv("AUTH_URI"),
 	}
 
 	grpcServer := grpc.NewServer(grpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{

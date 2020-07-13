@@ -4,12 +4,13 @@ import (
 	"context"
 
 	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc/core"
+	handler "github.com/GuyARoss/project-orva/internal"
 	"github.com/GuyARoss/project-orva/pkg/orva"
 	"github.com/GuyARoss/project-orva/pkg/utilities"
 )
 
 type ServiceRequest struct {
-	RoutineRequest *RoutineRequest
+	RoutineRequest *handler.RoutineRequest
 }
 
 // ProcessStatement processes the inputted statement, outputs a response.
@@ -20,7 +21,7 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 	input := &orva.Input{Message: req.Message, DeviceID: req.DeviceID, UserID: req.UserID}
 	octx := orva.CreateContext(input)
 
-	server.RoutineRequest.CoreHandler(octx)
+	server.RoutineRequest.Invoke(octx)
 
 	responses := octx.Responses()
 	rlen := len(responses)
@@ -33,7 +34,6 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 			Gph:      responses[i].GraphicURL,
 			GphType:  responses[i].GraphicType,
 			Duration: responses[i].Duration,
-			// @@ remove the error from the protobuf
 		}
 	}
 

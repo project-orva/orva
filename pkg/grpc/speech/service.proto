@@ -8,12 +8,14 @@ service grpcSpeech {
 
 message SpeechRequest {
     string Message = 1;
+    string UId = 2;
+    string TransactionId = 3;
 }
 
 message SpeechResponse {
-    float Accuracy = 1; // range 0.0-1.0 
+    float Accuracy = 1; //range 0.0-1.0 
     string Message = 2;             
     string GraphicURL = 3;
     int32 GraphicType = 4;    
-    float Duration = 7; // miliseconds
+    float Duration = 5; //~miliseconds
 }

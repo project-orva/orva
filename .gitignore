@@ -1,4 +1,3 @@
-*.swp
-
+.env
 ./conf
 conf/aws-rds.json
