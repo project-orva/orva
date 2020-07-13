@@ -35,6 +35,7 @@ func main() {
 		SkillClient: grpcSkill.CreateClientConn(os.Getenv("SKILL_URI")),
 		SpeechClient: grpcSpeech.CreateClientConn(os.Getenv("SPEECH_URI")),
 		AuthURI: os.Getenv("AUTH_URI"),
+		RepositoryURI: os.Getenv("REPO_URI"),
 	}
 
 	grpcServer := grpc.NewServer(grpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{

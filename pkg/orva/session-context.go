@@ -11,28 +11,29 @@ type Response struct {
 }
 
 // Input user input for the session
-type Input struct {
+type SessionRequest struct {
 	Message  string
 	DeviceID string
+	DeviceKey string
 	UserID   string
 }
 
 // SessionContext ~Core Route Session Context
 type SessionContext struct {
 	AppliedMessages []Response
-	InitialInput    Input
+	Request    SessionRequest
 	DeviceAccessLvl AccessType
 	UserAccessLvl   AccessType
 }
 
 // CreateContext creates session context from input
-func CreateContext(input *Input) *SessionContext {
+func CreateContext(input *SessionRequest) *SessionContext {
 	emptyApplied := make([]Response, 0)
 
 	ctx := &SessionContext{
 		AppliedMessages: emptyApplied,
 	}
-	ctx.InitialInput = *input
+	ctx.Request = *input
 
 	return ctx
 }

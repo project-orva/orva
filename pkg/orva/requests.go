@@ -44,12 +44,13 @@ func SkillProxy(endoint string, ctx *SessionContext) (*Response, error) {
 // skill_buildPayload builds the skill payload
 func skill_buildPayload(ctx *SessionContext) (string, error) {
 	payload := &skillPayload{
-		UserID:            ctx.InitialInput.UserID,
-		Message:           ctx.InitialInput.Message,
+		UserID:            ctx.Request.UserID,
+		Message:           ctx.Request.Message,
 		UserAccessLevel:   int32(ctx.UserAccessLvl),
 		DeviceAccessLevel: int32(ctx.DeviceAccessLvl),
 	}
 	b, err := json.Marshal(payload)
 
+	// @? why are we converting this to a string?
 	return string(b), err
 }

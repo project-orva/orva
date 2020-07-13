@@ -18,7 +18,11 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 	t := &utilities.TimeStamp{}
 	t.Start()
 
-	input := &orva.Input{Message: req.Message, DeviceID: req.DeviceID, UserID: req.UserID}
+	input := &orva.SessionRequest{
+		Message: req.Message,
+		DeviceID: req.DeviceID,
+		UserID: req.UserID,
+	}
 	octx := orva.CreateContext(input)
 
 	server.RoutineRequest.Invoke(octx)
