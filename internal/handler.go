@@ -22,7 +22,7 @@ type RoutineRequest struct {
 	RepositoryURI string
 }
 
-// CoreHandler unifies orva routines
+// Invoke unifies orva routines
 func (req *RoutineRequest) Invoke(ctx *orva.SessionContext) {
 	user, err := req.validateRequest(ctx)
 	if err != nil || user == nil {
@@ -39,8 +39,8 @@ func (req *RoutineRequest) Invoke(ctx *orva.SessionContext) {
 
 func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
 	// @@ go routines.
-	req.fowardContextToSkillService(ctx)
-	req.fowardContextToSpeechService(ctx)
+	req.forwardContextToSkillService(ctx)
+	req.forwardContextToSpeechService(ctx)
 
 	if len(ctx.AppliedMessages) == 0 {
 		ctx.Append(&orva.Response{
@@ -49,7 +49,7 @@ func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
 	}
 }
 
-func (req *RoutineRequest) fowardContextToSkillService(ctx *orva.SessionContext) {
+func (req *RoutineRequest) forwardContextToSkillService(ctx *orva.SessionContext) {
 	if req.SkillClient == nil {
 		return
 	}
@@ -72,8 +72,8 @@ func (req *RoutineRequest) fowardContextToSkillService(ctx *orva.SessionContext)
 	}
 }
 
-// FowardContextToSpeechService fowards context to speech service
-func (req *RoutineRequest) fowardContextToSpeechService(ctx *orva.SessionContext) {
+// ForwardContextToSpeechService forward context to speech service
+func (req *RoutineRequest) forwardContextToSpeechService(ctx *orva.SessionContext) {
 	if req.SpeechClient == nil {
 		return
 	}
@@ -116,8 +116,8 @@ func (req *RoutineRequest) fetchIdentityToken(ctx *orva.SessionContext) (*Dispat
 		return nil, marshalErr
 	}
 
-	authUri := fmt.Sprintf("%s/dispatch", req.AuthURI)
-	authRequest, err := http.NewRequest("POST", authUri, bytes.NewBuffer(payloadBytes))
+	authURI := fmt.Sprintf("%s/dispatch", req.AuthURI)
+	authRequest, err := http.NewRequest("POST", authURI, bytes.NewBuffer(payloadBytes))
 	authRequest.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
@@ -187,7 +187,7 @@ func (req *RoutineRequest) validateRequest(ctx *orva.SessionContext) (*User, err
 		return nil, err
 	}
 
-	// make call to profile respository with the identity token & prepare the user payload
+	// make call to profile repository with the identity token & prepare the user payload
 	// if err then return invalid, else return valid.
 	user, fetchErr := req.fetchUserProfile(&ctx.Request, token.IdentityToken)
 	if fetchErr != nil {

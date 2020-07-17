@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-
+	"fmt"
 	grpcCore "github.com/GuyARoss/project-orva/pkg/grpc/core"
 	handler "github.com/GuyARoss/project-orva/internal"
 	"github.com/GuyARoss/project-orva/pkg/orva"
@@ -42,6 +42,8 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 	}
 
 	t.Stop()
+
+	fmt.Println(t.Distance())
 
 	return &grpcCore.Response{
 		Duration:         float32(t.Distance()),
