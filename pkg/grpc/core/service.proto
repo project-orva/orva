@@ -8,6 +8,7 @@ message Request {
     string Message = 1;
     string UserID  = 2;
     string DeviceID   = 3;
+    string DeviceKey = 4;
 }
 
 message Response {
