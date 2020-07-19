@@ -15,7 +15,6 @@ import (
 type RoutineRequest struct {
 	SpeechClient grpcSpeech.GrpcSpeechClient
 	SkillClient  grpcSkill.GrpcSkillClient
-
 	AuthURI 	string 
 	RepositoryURI string
 }
@@ -93,12 +92,11 @@ func (req *RoutineRequest) validateRequest(ctx *orva.SessionContext) (*repoServi
 
 	token, err := authService.FetchIdentityToken(req.AuthURI, dispatchPayload)
 	if (err != nil || len(token.IdentityToken) == 0) {
-		// cannot verify the devices origin, consider blocking or sending an alert out.
+		// @@ cannot verify the devices origin, consider blocking or sending an alert out.
 		return nil, err
 	}
 		
 	// make call to profile repository with the identity token & prepare the user payload
-	// if err then return invalid, else return valid.
 	user, fetchErr := repoService.FetchUserProfile(
 		req.RepositoryURI,
 		ctx.Request.UserID,
