@@ -20,7 +20,7 @@ import (
 )
 
 func main() {
-	tcpPort := flag.String("p", "3005", "specified port to start the gRPC server on")
+	tcpPort := flag.String("p", "3003", "specified port to start the gRPC server on")
 	envErr := godotenv.Load("../../.env")
 	if envErr != nil {
 		panic(envErr)

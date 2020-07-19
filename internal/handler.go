@@ -3,15 +3,13 @@ package handler
 
 import (
 	"context"
-	"net/http"
-	"bytes"
-	"io/ioutil"
-	"fmt"
-	"encoding/json"
 
 	grpcSkill "github.com/GuyARoss/project-orva/pkg/grpc/skill"
 	grpcSpeech "github.com/GuyARoss/project-orva/pkg/grpc/speech"
 	orva "github.com/GuyARoss/project-orva/pkg/orva"
+
+	authService "github.com/GuyARoss/project-orva/pkg/services/auth"
+	repoService "github.com/GuyARoss/project-orva/pkg/services/repository"
 )
 // RoutineRequest request used to interact with the handler
 type RoutineRequest struct {
@@ -50,10 +48,6 @@ func (req *RoutineRequest) invokeRoutineHandlers(ctx *orva.SessionContext) {
 }
 
 func (req *RoutineRequest) forwardContextToSkillService(ctx *orva.SessionContext) {
-	if req.SkillClient == nil {
-		return
-	}
-
 	sq := &grpcSkill.ProcessRequest{
 		Message: ctx.Request.Message,
 		TransactionID: "test123",
@@ -74,10 +68,6 @@ func (req *RoutineRequest) forwardContextToSkillService(ctx *orva.SessionContext
 
 // ForwardContextToSpeechService forward context to speech service
 func (req *RoutineRequest) forwardContextToSpeechService(ctx *orva.SessionContext) {
-	if req.SpeechClient == nil {
-		return
-	}
-
 	// @@ add the username to the request?
 	sq := &grpcSpeech.SpeechRequest{
 		Message: ctx.Request.Message,
@@ -95,101 +85,25 @@ func (req *RoutineRequest) forwardContextToSpeechService(ctx *orva.SessionContex
 	})
 }
 
-type DispatchAuthPayload struct {
-	ID string `json:"resource_id"`
-	Key string `json:"resource_key"`	
-}
-
-type DispatchAuthResponse struct {
-	IdentityToken string `json:"identity_token"`
-	IAT uint64 `json:"iat"`
-}
-
-func (req *RoutineRequest) fetchIdentityToken(ctx *orva.SessionContext) (*DispatchAuthResponse, error) {
-	dispatchPayload := &DispatchAuthPayload{
+func (req *RoutineRequest) validateRequest(ctx *orva.SessionContext) (*repoService.Profile, error) {
+	dispatchPayload := &authService.DispatchAuthPayload{
 		ID: ctx.Request.DeviceID,
 		Key: ctx.Request.DeviceKey,
 	}
 
-	payloadBytes, marshalErr := json.Marshal(dispatchPayload)
-	if marshalErr != nil {
-		return nil, marshalErr
-	}
-
-	authURI := fmt.Sprintf("%s/dispatch", req.AuthURI)
-	authRequest, err := http.NewRequest("POST", authURI, bytes.NewBuffer(payloadBytes))
-	authRequest.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(authRequest)
-
-	if err != nil {
+	token, err := authService.FetchIdentityToken(req.AuthURI, dispatchPayload)
+	if (err != nil || len(token.IdentityToken) == 0) {
+		// cannot verify the devices origin, consider blocking or sending an alert out.
 		return nil, err
 	}
-
-	defer resp.Body.Close()
-
-	ioout, ioErr := ioutil.ReadAll(resp.Body)
-
-	if ioErr != nil {
-		return nil, ioErr
-	}
-
-	dispatchResp := &DispatchAuthResponse{}
-	marErr := json.Unmarshal(ioout, dispatchResp)
-	if marErr != nil {
-		return nil, marErr
-	}
-
-	return dispatchResp, nil
-}
-
-type User struct {
-	FirstName string `json:"firstName"`
-	lastName string `json:"lastName"`
-	AccessLevel uint32 `json:"accessLevel"`
-	ID string `json:"id"`
-}
-
-func (req *RoutineRequest) fetchUserProfile(input *orva.SessionRequest, identityToken string) (*User, error) {
-	uri := fmt.Sprintf("%s/profile?id=%s", req.RepositoryURI, input.UserID)
-	httpReq, err := http.NewRequest("GET", uri, nil)
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("x-identity", identityToken)
-
-	client := &http.Client{}
-	resp, err := client.Do(httpReq)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
-	ioout, ioErr := ioutil.ReadAll(resp.Body)
-
-	if ioErr != nil {
-		return nil, ioErr
-	}
-
-	dispatchResp := &User{}
-	marErr := json.Unmarshal(ioout, dispatchResp)
-	if marErr != nil {
-		return nil, marErr
-	}
-
-	return dispatchResp, nil
-}
-
-func (req *RoutineRequest) validateRequest(ctx *orva.SessionContext) (*User, error) {
-	token, err := req.fetchIdentityToken(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+		
 	// make call to profile repository with the identity token & prepare the user payload
 	// if err then return invalid, else return valid.
-	user, fetchErr := req.fetchUserProfile(&ctx.Request, token.IdentityToken)
+	user, fetchErr := repoService.FetchUserProfile(
+		req.RepositoryURI,
+		ctx.Request.UserID,
+		token.IdentityToken,
+	)
 	if fetchErr != nil {
 		return nil, fetchErr
 	}

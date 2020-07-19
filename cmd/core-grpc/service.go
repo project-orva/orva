@@ -22,6 +22,7 @@ func (server *ServiceRequest) ProcessStatement(ctx context.Context, req *grpcCor
 		Message: req.Message,
 		DeviceID: req.DeviceID,
 		UserID: req.UserID,
+		DeviceKey: req.DeviceKey,
 	}
 	octx := orva.CreateContext(input)
 
